@@ -19,4 +19,10 @@ public interface IOfflineStore
     /// <returns>A reference to the datasync table.</returns>
     /// <exception cref="InvalidOperationException">if the table reference cannot be created.</exception>
     IOfflineTable<T> GetOfflineTable<T>(string? tableName) where T : IOfflineEntity;
+
+    /// <summary>
+    /// Retrieves a reference to the operations queue.
+    /// </summary>
+    /// <returns>A reference to the <see cref="IOperationsQueue"/> for storing pending operations.</returns>
+    IOperationsQueue GetOperationsQueue();
 }

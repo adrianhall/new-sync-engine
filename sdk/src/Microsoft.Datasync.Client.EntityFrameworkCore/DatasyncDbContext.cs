@@ -20,4 +20,9 @@ public abstract class DatasyncDbContext : DbContext
     /// The EF version of the DeltaToken store.
     /// </summary>
     public DbSet<DeltaToken> DeltaTokens => Set<DeltaToken>();
+
+    /// <summary>
+    /// The EF version of the OperationsQueue store.
+    /// </summary>
+    public DbSet<OperationsQueueEntry> OperationsQueue => Set<OperationsQueueEntry>();
 }

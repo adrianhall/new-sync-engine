@@ -5,7 +5,7 @@ namespace Microsoft.Datasync.Client.EntityFrameworkCore;
 
 public class OfflineStore<TContext> : IOfflineStore where TContext : DatasyncDbContext
 {
-    private IDbContextFactory<TContext> contextFactory;
+    private readonly IDbContextFactory<TContext> contextFactory;
 
     /// <summary>
     /// Creates a new <see cref="OfflineStore"/> using the specified context factory.
@@ -21,10 +21,7 @@ public class OfflineStore<TContext> : IOfflineStore where TContext : DatasyncDbC
     /// </summary>
     /// <returns>A reference to the <see cref="IDeltaTokenStore"/> for storing delta-tokens.</returns>
     public IDeltaTokenStore GetDeltaTokenStore()
-    {
-        var context = contextFactory.CreateDbContext();
-        return new DeltaTokenStore(context);
-    }
+        => new DeltaTokenStore(contextFactory.CreateDbContext());
 
     /// <summary>
     /// Retrieves a table reference for a datasync table.
@@ -37,4 +34,11 @@ public class OfflineStore<TContext> : IOfflineStore where TContext : DatasyncDbC
     {
         throw new NotImplementedException();
     }
+
+    /// <summary>
+    /// Retrieves a reference to the operations queue.
+    /// </summary>
+    /// <returns>A reference to the <see cref="IOperationsQueue"/> for storing pending operations.</returns>
+    public IOperationsQueue GetOperationsQueue()
+        => new OperationsQueue(contextFactory.CreateDbContext());
 }
