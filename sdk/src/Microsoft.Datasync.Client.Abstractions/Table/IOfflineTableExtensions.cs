@@ -1,9 +1,9 @@
 ﻿namespace Microsoft.Datasync.Client.Abstractions;
 
 /// <summary>
-/// A set of extension methods for the <see cref="IDatasyncTable{T}"/> interface.
+/// A set of extension methods for the <see cref="IOfflineTable{T}"/> interface.
 /// </summary>
-public static class IDatasyncTableExtensions
+public static class IOfflineTableExtensions
 {
     /// <summary>
     /// Adds a single entity to the datasync table.
@@ -14,7 +14,7 @@ public static class IDatasyncTableExtensions
     /// <param name="options">The options to use when adding the entity.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the operation result when complete.</returns>
-    public static async ValueTask<IOperationResult<T>> AddAsync<T>(this IDatasyncTable<T> table, T entity, DatasyncAddOptions options, CancellationToken cancellationToken = default) where T : IDatasyncEntity
+    public static async ValueTask<IOperationResult<T>> AddAsync<T>(this IOfflineTable<T> table, T entity, AddOperationOptions options, CancellationToken cancellationToken = default) where T : IOfflineEntity
     {
         var results = await table.AddRangeAsync(new T[] { entity }, options, cancellationToken).ConfigureAwait(false);
         return results.Single();
@@ -28,8 +28,8 @@ public static class IDatasyncTableExtensions
     /// <param name="entity">The entity to be added.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the operation result when complete.</returns>
-    public static ValueTask<IOperationResult<T>> AddAsync<T>(this IDatasyncTable<T> table, T entity, CancellationToken cancellationToken = default) where T : IDatasyncEntity
-        => table.AddAsync(entity, new DatasyncAddOptions(), cancellationToken);
+    public static ValueTask<IOperationResult<T>> AddAsync<T>(this IOfflineTable<T> table, T entity, CancellationToken cancellationToken = default) where T : IOfflineEntity
+        => table.AddAsync(entity, new AddOperationOptions(), cancellationToken);
 
     /// <summary>
     /// Adds a set of entities into the store, using default options.
@@ -40,8 +40,8 @@ public static class IDatasyncTableExtensions
     /// <param name="entities">The list of entities that need to be added.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the result of the add operation on completion.</returns>
-    public static ValueTask<IEnumerable<IOperationResult<T>>> AddRangeAsync<T>(this IDatasyncTable<T> table, IEnumerable<T> entities, CancellationToken cancellationToken = default) where T : IDatasyncEntity
-        => table.AddRangeAsync(entities, new DatasyncAddOptions(), cancellationToken);
+    public static ValueTask<IEnumerable<IOperationResult<T>>> AddRangeAsync<T>(this IOfflineTable<T> table, IEnumerable<T> entities, CancellationToken cancellationToken = default) where T : IOfflineEntity
+        => table.AddRangeAsync(entities, new AddOperationOptions(), cancellationToken);
 
     /// <summary>
     /// Removes an entity from the store; the entity is identified by its ID.
@@ -50,7 +50,7 @@ public static class IDatasyncTableExtensions
     /// <param name="options">The options for the remove operation.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the result of the remove operation on completion.</returns>
-    public static async ValueTask<IOperationResult> RemoveAsync<T>(this IDatasyncTable<T> table, string id, DatasyncRemoveOptions options, CancellationToken cancellationToken = default) where T : IDatasyncEntity
+    public static async ValueTask<IOperationResult> RemoveAsync<T>(this IOfflineTable<T> table, string id, RemoveOperationOptions options, CancellationToken cancellationToken = default) where T : IOfflineEntity
     {
         var results = await table.RemoveRangeAsync(new string[] { id }, options, cancellationToken).ConfigureAwait(false);
         return results.Single();
@@ -63,8 +63,8 @@ public static class IDatasyncTableExtensions
     /// <param name="options">The options for the remove operation.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the result of the remove operation on completion.</returns>
-    public static ValueTask<IOperationResult> RemoveAsync<T>(this IDatasyncTable<T> table, string id, CancellationToken cancellationToken = default) where T : IDatasyncEntity
-        => table.RemoveAsync(id, new DatasyncRemoveOptions(), cancellationToken);
+    public static ValueTask<IOperationResult> RemoveAsync<T>(this IOfflineTable<T> table, string id, CancellationToken cancellationToken = default) where T : IOfflineEntity
+        => table.RemoveAsync(id, new RemoveOperationOptions(), cancellationToken);
 
     /// <summary>
     /// Removes an entity from the store.
@@ -73,7 +73,7 @@ public static class IDatasyncTableExtensions
     /// <param name="options">The options for the remove operation.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the result of the remove operation on completion.</returns>
-    public static ValueTask<IOperationResult> RemoveAsync<T>(this IDatasyncTable<T> table, T entity, DatasyncRemoveOptions options, CancellationToken cancellationToken = default) where T : IDatasyncEntity
+    public static ValueTask<IOperationResult> RemoveAsync<T>(this IOfflineTable<T> table, T entity, RemoveOperationOptions options, CancellationToken cancellationToken = default) where T : IOfflineEntity
         => table.RemoveAsync(entity.Id, options, cancellationToken);
 
     /// <summary>
@@ -82,8 +82,8 @@ public static class IDatasyncTableExtensions
     /// <param name="entity">The entity to be removed.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the result of the remove operation on completion.</returns>
-    public static ValueTask<IOperationResult> RemoveAsync<T>(this IDatasyncTable<T> table, T entity, CancellationToken cancellationToken = default) where T : IDatasyncEntity
-        => table.RemoveAsync(entity, new DatasyncRemoveOptions(), cancellationToken);
+    public static ValueTask<IOperationResult> RemoveAsync<T>(this IOfflineTable<T> table, T entity, CancellationToken cancellationToken = default) where T : IOfflineEntity
+        => table.RemoveAsync(entity, new RemoveOperationOptions(), cancellationToken);
 
     /// <summary>
     /// Removes a set of entities from the store; each entity is identified by its ID.  The default remove options are used.
@@ -91,8 +91,8 @@ public static class IDatasyncTableExtensions
     /// <param name="entityIds">The set of entity IDs to be removed.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the result of the remove operation on completion.</returns>
-    public static ValueTask<IEnumerable<IOperationResult>> RemoveRangeAsync<T>(this IDatasyncTable<T> table, IEnumerable<string> entityIds, CancellationToken cancellationToken = default) where T : IDatasyncEntity
-        => table.RemoveRangeAsync(entityIds, new DatasyncRemoveOptions(), cancellationToken);
+    public static ValueTask<IEnumerable<IOperationResult>> RemoveRangeAsync<T>(this IOfflineTable<T> table, IEnumerable<string> entityIds, CancellationToken cancellationToken = default) where T : IOfflineEntity
+        => table.RemoveRangeAsync(entityIds, new RemoveOperationOptions(), cancellationToken);
 
     /// <summary>
     /// Removes a set of entities from the store.  The default remove options are used.
@@ -101,7 +101,7 @@ public static class IDatasyncTableExtensions
     /// <param name="options">The options to use for the remove operation.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the result of the remove operation on completion.</returns>
-    public static ValueTask<IEnumerable<IOperationResult>> RemoveRangeAsync<T>(this IDatasyncTable<T> table, IEnumerable<T> entities, DatasyncRemoveOptions options, CancellationToken cancellationToken = default) where T : IDatasyncEntity
+    public static ValueTask<IEnumerable<IOperationResult>> RemoveRangeAsync<T>(this IOfflineTable<T> table, IEnumerable<T> entities, RemoveOperationOptions options, CancellationToken cancellationToken = default) where T : IOfflineEntity
         => table.RemoveRangeAsync(entities.Select(x => x.Id), options, cancellationToken);
 
     /// <summary>
@@ -110,8 +110,8 @@ public static class IDatasyncTableExtensions
     /// <param name="entities">The set of entities to be removed.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the result of the remove operation on completion.</returns>
-    public static ValueTask<IEnumerable<IOperationResult>> RemoveRangeAsync<T>(this IDatasyncTable<T> table, IEnumerable<T> entities, CancellationToken cancellationToken = default) where T : IDatasyncEntity
-        => table.RemoveRangeAsync(entities, new DatasyncRemoveOptions(), cancellationToken);
+    public static ValueTask<IEnumerable<IOperationResult>> RemoveRangeAsync<T>(this IOfflineTable<T> table, IEnumerable<T> entities, CancellationToken cancellationToken = default) where T : IOfflineEntity
+        => table.RemoveRangeAsync(entities, new RemoveOperationOptions(), cancellationToken);
 
     /// <summary>
     /// Replaces a single entity to the datasync table.
@@ -122,7 +122,7 @@ public static class IDatasyncTableExtensions
     /// <param name="options">The options to use when replaciong the entity.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the operation result when complete.</returns>
-    public static async ValueTask<IOperationResult<T>> ReplaceAsync<T>(this IDatasyncTable<T> table, T entity, DatasyncReplaceOptions options, CancellationToken cancellationToken = default) where T : IDatasyncEntity
+    public static async ValueTask<IOperationResult<T>> ReplaceAsync<T>(this IOfflineTable<T> table, T entity, ReplaceOperationOptions options, CancellationToken cancellationToken = default) where T : IOfflineEntity
     {
         var results = await table.ReplaceRangeAsync(new T[] { entity }, options, cancellationToken).ConfigureAwait(false);
         return results.Single();
@@ -136,8 +136,8 @@ public static class IDatasyncTableExtensions
     /// <param name="entity">The entity to be replaced.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the operation result when complete.</returns>
-    public static ValueTask<IOperationResult<T>> ReplaceAsync<T>(this IDatasyncTable<T> table, T entity, CancellationToken cancellationToken = default) where T : IDatasyncEntity
-        => table.ReplaceAsync(entity, new DatasyncReplaceOptions(), cancellationToken);
+    public static ValueTask<IOperationResult<T>> ReplaceAsync<T>(this IOfflineTable<T> table, T entity, CancellationToken cancellationToken = default) where T : IOfflineEntity
+        => table.ReplaceAsync(entity, new ReplaceOperationOptions(), cancellationToken);
 
     /// <summary>
     /// Replaces a set of entities in the store (based on the ID of the entities), using the default replace options.
@@ -145,6 +145,6 @@ public static class IDatasyncTableExtensions
     /// <param name="entities">The entities to be replaced in the store.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the result of the replace operation.</returns>
-    public static ValueTask<IEnumerable<IOperationResult<T>>> ReplaceRangeAsync<T>(this IDatasyncTable<T> table, IEnumerable<T> entities, CancellationToken cancellationToken = default) where T : IDatasyncEntity
-        => table.ReplaceRangeAsync(entities, new DatasyncReplaceOptions(), cancellationToken);
+    public static ValueTask<IEnumerable<IOperationResult<T>>> ReplaceRangeAsync<T>(this IOfflineTable<T> table, IEnumerable<T> entities, CancellationToken cancellationToken = default) where T : IOfflineEntity
+        => table.ReplaceRangeAsync(entities, new ReplaceOperationOptions(), cancellationToken);
 }

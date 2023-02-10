@@ -5,19 +5,8 @@
 /// storage and retrieval of data.
 /// </summary>
 /// <typeparam name="T">The type of the entity.</typeparam>
-public interface IDatasyncTable<T> where T : IDatasyncEntity
+public interface IOfflineTable<T> where T : IOfflineEntity
 {
-    /// <summary>
-    /// Shows if the table can handle offline synchronization.
-    /// </summary>
-    /// <remarks><c>true</c> if the table is offline capable, <c>false</c> otherwise.</remarks>
-    bool IsOfflineCapable { get; }
-
-    /// <summary>
-    /// The last date/time that this table was synchronized.
-    /// </summary>
-    DateTimeOffset? LastSynchronized { get; }
-
     /// <summary>
     /// Adds a set of entities into the store.
     /// </summary>
@@ -28,7 +17,7 @@ public interface IDatasyncTable<T> where T : IDatasyncEntity
     /// <param name="options">The options for the add operation.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the result of the add operation on completion.</returns>
-    ValueTask<IEnumerable<IOperationResult<T>>> AddRangeAsync(IEnumerable<T> entities, DatasyncAddOptions options, CancellationToken cancellationToken = default);
+    ValueTask<IEnumerable<IOperationResult<T>>> AddRangeAsync(IEnumerable<T> entities, AddOperationOptions options, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Entry-point for searches - allows the user to do LINQ expressions
@@ -52,7 +41,7 @@ public interface IDatasyncTable<T> where T : IDatasyncEntity
     /// <param name="options">The options for the remove operation.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the result of the remove operation on completion.</returns>
-    ValueTask<IEnumerable<IOperationResult>> RemoveRangeAsync(IEnumerable<string> entityIds, DatasyncRemoveOptions options, CancellationToken cancellationToken = default);
+    ValueTask<IEnumerable<IOperationResult>> RemoveRangeAsync(IEnumerable<string> entityIds, RemoveOperationOptions options, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Replaces a set of entities in the store (based on the ID of the entities).
@@ -61,5 +50,5 @@ public interface IDatasyncTable<T> where T : IDatasyncEntity
     /// <param name="options">The options for the replace operation.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that resolves to the result of the replace operation.</returns>
-    ValueTask<IEnumerable<IOperationResult<T>>> ReplaceRangeAsync(IEnumerable<T> entities, DatasyncReplaceOptions options, CancellationToken cancellationToken = default);
+    ValueTask<IEnumerable<IOperationResult<T>>> ReplaceRangeAsync(IEnumerable<T> entities, ReplaceOperationOptions options, CancellationToken cancellationToken = default);
 }

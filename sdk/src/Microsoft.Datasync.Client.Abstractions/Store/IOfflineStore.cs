@@ -1,13 +1,7 @@
 ﻿namespace Microsoft.Datasync.Client.Abstractions;
 
-public interface IDatasyncStore
+public interface IOfflineStore
 {
-    /// <summary>
-    /// Shows if the store is an offline store.
-    /// </summary>
-    /// <remarks><c>true</c> if the store is offline capable, <c>false</c> otherwise.</remarks>
-    bool IsOfflineCapable { get; }
-
     /// <summary>
     /// Retrieves a table reference for a datasync table.
     /// </summary>
@@ -15,5 +9,5 @@ public interface IDatasyncStore
     /// <param name="tableName">The name of the table.</param>
     /// <returns>A reference to the datasync table.</returns>
     /// <exception cref="InvalidOperationException">if the table reference cannot be created.</exception>
-    IDatasyncTable<T> GetDatasyncTable<T>(string? tableName) where T : IDatasyncEntity;
+    IOfflineTable<T> GetOfflineTable<T>(string? tableName) where T : IOfflineEntity;
 }

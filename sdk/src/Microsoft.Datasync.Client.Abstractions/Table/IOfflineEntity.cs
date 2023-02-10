@@ -3,7 +3,7 @@
 /// <summary>
 /// The base entity definition for all entities within a datasync service.
 /// </summary>
-public interface IDatasyncEntity
+public interface IOfflineEntity
 {
     string Id { get; set; }
 }
