@@ -1,7 +1,16 @@
 ﻿namespace Microsoft.Datasync.Client.Abstractions;
 
+/// <summary>
+/// A set of extension methods for the <see cref="IOfflineStore"/> interface.
+/// </summary>
 public interface IOfflineStore
 {
+    /// <summary>
+    /// Retrieves a reference to the delta token store.
+    /// </summary>
+    /// <returns>A reference to the <see cref="IDeltaTokenStore"/> for storing delta-tokens.</returns>
+    IDeltaTokenStore GetDeltaTokenStore();
+
     /// <summary>
     /// Retrieves a table reference for a datasync table.
     /// </summary>
