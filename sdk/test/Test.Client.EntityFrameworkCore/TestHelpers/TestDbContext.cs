@@ -8,8 +8,8 @@ namespace Test.Client.EntityFrameworkCore.TestHelpers;
 [ExcludeFromCodeCoverage]
 class TestDbContextFactory : IDbContextFactory<TestDbContext>, IDisposable
 {
-    private SqliteConnection connection;
-    private DbContextOptions<TestDbContext> options;
+    private readonly SqliteConnection connection;
+    private readonly DbContextOptions<TestDbContext> options;
 
     public TestDbContextFactory()
     {
