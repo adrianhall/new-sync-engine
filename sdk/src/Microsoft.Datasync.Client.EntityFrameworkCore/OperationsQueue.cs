@@ -18,10 +18,46 @@ public class OperationsQueue : IOperationsQueue
         this.context = context;
     }
 
+#region IOperationsQueue
     /// <summary>
-    /// Returns an <see cref="IQueryable{T}"/> of the datasync operations, ordered
-    /// by the created data.
+    /// Gets the number of pending operations.
     /// </summary>
-    public IQueryable<IDatasyncOperation> AsQueryable()
-        => context.OperationsQueue.OrderBy(x => x.Sequence).AsQueryable<IDatasyncOperation>();
+    /// <value>The number of pending operations (or null if the number is not known at this time).</value>
+    public long? PendingOperations
+    {
+        get => context.OperationsQueue.Count(x => x.State != DatasyncOperationState.Completed);
+    }
+
+    /// <summary>
+    /// Counts the number of pending operations.
+    /// </summary>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"> to observe.</param>
+    /// <returns>The number of pending operations in the queue.</returns>
+    public ValueTask<long> CountPendingOperationsAsync(CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Returns the list of pending operations that have not yet been executed.
+    /// </summary>
+    public IAsyncEnumerable<IDatasyncOperation> GetPendingOperations()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Updates a pending operation with new information.
+    /// </summary>
+    /// <remarks>
+    /// Only certain fields are updatable by this operation, e.g. the state of the operation.
+    /// </remarks>
+    /// <param name="operation">The operation to update, with new information.</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"> to observe.</param>
+    /// <returns>A <see cref="ValueTask"/> that resolves when the update is complete.</returns>
+    public ValueTask<IDatasyncOperation> UpdatePendingOperationAsync(IDatasyncOperation operation, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+#endregion
 }
