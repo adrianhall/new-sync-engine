@@ -32,5 +32,6 @@ public interface IOperationsQueue
     /// <param name="operation">The operation to update, with new information.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"> to observe.</param>
     /// <returns>A <see cref="ValueTask"/> that resolves to the updated operation when the update is complete.</returns>
+    /// <exception cref="OperationNotFoundException">when the operation specified for update cannot be found.</exception>
     ValueTask<IDatasyncOperation> UpdatePendingOperationAsync(IDatasyncOperation operation, CancellationToken cancellationToken = default);
 }
